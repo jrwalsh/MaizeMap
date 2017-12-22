@@ -9,18 +9,20 @@
 ##        corncyc.gene.frameid.raw
 ##        corncyc.reaction.frameid.raw
 ##        corncyc.pathway.frameid.raw
+##        txdb
 ## Output:
 ##        maize.genes.v3_to_v4.map
 ##        corncyc.gene.map
 ##        corncyc.reaction.gene.map
 ##        corncyc.pathway.reaction.map
+##        gene.transcript.map
 ##
 ## Date: 2017-12-12
 ## Author: Jesse R. Walsh
 ####################################################################################################
 library(tidyr)
 library(dplyr)
-# library(GenomicFeatures)
+library(GenomicFeatures)
 
 #==================================================================================================#
 ## maize.genes.v3_to_v4_map.raw
@@ -118,33 +120,28 @@ corncyc.pathway.reaction.map <-
   select(PathwayID, ReactionID)
 
 #==================================================================================================#
-## txdb -> geneTranscript.map
+## txdb -> gene.transcript.map
 #--------------------------------------------------------------------------------------------------#
-# ## Only work with chromosomes, ignore unplaced contigs
-# seqlevels(txdb) <- c("1","2","3","4","5","6","7","8","9","10")
-#
-# ## Get gene/transcript names
-# geneTranscript.map <- data.frame(transcripts(txdb)$tx_name)
-# # GRList <- exonsBy(txdb, by = "tx")
-# # tx_ids <- names(GRList)
-# # head(select(txdb, keys=tx_ids, columns=c("GENEID","TXNAME"), keytype="TXID"))
-#
-# ## Clean geneTranscript.map
-# geneTranscript.map <-
-#   geneTranscript.map %>%
-#   rename(transcript=transcripts.txdb..tx_name)
-# geneTranscript.map$transcript <- sub("transcript:", "", geneTranscript.map$transcript)
-# geneTranscript.map$gene <- sub("(Zm[0-9]{5}d[0-9]{6}).*", "\\1", geneTranscript.map$transcript)
-# geneTranscript.map <- geneTranscript.map[!startsWith(geneTranscript.map$transcript, "MI"),]
-# geneTranscript.counts <-
-#   geneTranscript.map %>%
-#   select(gene) %>%
-#   group_by(gene) %>%
-#   summarise(n=n())
-#
-# rm(txdb)
+## Only work with chromosomes, ignore unplaced contigs
+seqlevels(txdb) <- c("1","2","3","4","5","6","7","8","9","10")
+
+## Get gene/transcript names
+gene.transcript.map <- data.frame(transcripts(txdb)$tx_name)
+
+## Clean gene.transcript.map
+gene.transcript.map <-
+  gene.transcript.map %>%
+  rename(transcript=transcripts.txdb..tx_name)
+gene.transcript.map$transcript <- sub("transcript:", "", gene.transcript.map$transcript)
+gene.transcript.map$gene <- sub("(Zm[0-9]{5}d[0-9]{6}).*", "\\1", gene.transcript.map$transcript)
+gene.transcript.map <- gene.transcript.map[!startsWith(gene.transcript.map$transcript, "MI"),]
+
+## Reorder columns to gene:transcript
+gene.transcript.map <-
+  gene.transcript.map %>%
+  select(gene, transcript)
 
 #--------------------------------------------------------------------------------------------------#
-# detach("package:GenomicFeatures", unload=TRUE)
 detach("package:tidyr", unload=TRUE)
 detach("package:dplyr", unload=TRUE)
+detach("package:GenomicFeatures", unload=TRUE)

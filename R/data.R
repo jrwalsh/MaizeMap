@@ -47,3 +47,14 @@
 #'
 #' @format A data frame in long format.
 "corncyc.pathway.reaction.map"
+
+#' Map from genes to all available transcripts.
+#'
+#' Parsed from the zea mays b73 v4.32 gff3 file.  Excludes orphan exons.
+#'
+#' @docType data
+#' @usage data(gene.transcript.map)
+#' @keywords datasets
+#'
+#' @format A data frame in long format.
+"gene.transcript.map"

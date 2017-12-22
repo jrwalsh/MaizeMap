@@ -13,10 +13,11 @@ library(tidyr)
 library(dplyr)
 
 ## Save data objects
-devtools::use_data(maize.genes.v3_to_v4.map)
-devtools::use_data(corncyc.gene.map)
-devtools::use_data(corncyc.reaction.gene.map)
-devtools::use_data(corncyc.pathway.reaction.map)
+devtools::use_data(maize.genes.v3_to_v4.map, overwrite = TRUE)
+devtools::use_data(corncyc.gene.map, overwrite = TRUE)
+devtools::use_data(corncyc.reaction.gene.map, overwrite = TRUE)
+devtools::use_data(corncyc.pathway.reaction.map, overwrite = TRUE)
+devtools::use_data(gene.transcript.map, overwrite = TRUE)
 
 devtools::document(roclets=c('rd', 'collate', 'namespace'))
 

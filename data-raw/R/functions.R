@@ -15,7 +15,6 @@ getSplitGeneModels.v3_to_v4 <- function() {
 
   df <- df[grepl(",", df$v3_id),]
 
-
   return(df)
 }
 
@@ -26,7 +25,6 @@ getMergedGeneModels.v3_to_v4 <- function() {
     summarise(v4_id = paste(v4_id, collapse = ", "))
 
   df <- df[grepl(",", df$v4_id),]
-
 
   return(df)
 }

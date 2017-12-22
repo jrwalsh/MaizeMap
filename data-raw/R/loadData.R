@@ -7,12 +7,14 @@
 ##        corncyc.gene.frameid.raw
 ##        corncyc.reaction.frameid.raw
 ##        corncyc.pathway.frameid.raw
+##        txdb
 ##
 ## Date: 2017-12-12
 ## Author: Jesse R. Walsh
 ####################################################################################################
 library(readr)
 library(readxl)
+library(GenomicFeatures)
 
 ## Mapping data provided by Maggie, based on synteny from SynMap
 maize.genes.v3_to_v4_map.raw <- read_xlsx("./data-raw/B73_GeneModels/MaizeGDB_v3_v4.genes.xlsx")
@@ -27,8 +29,9 @@ corncyc.reaction.frameid.raw <- read_delim("data-raw/Pathways/CornCyc_8.0.1/Corn
 corncyc.pathway.frameid.raw <- read_delim("data-raw/Pathways/CornCyc_8.0.1/CornCyc_8.0.1_Pathways.tab", "\t", escape_double = FALSE, trim_ws = TRUE)
 
 ## Load maize GFF data
-# txdb <- makeTxDbFromGFF("./Data/MaizeGFF3/Zea_mays.AGPv4.32.gff3.gz", format="gff3")
+txdb <- makeTxDbFromGFF("./data-raw/MaizeGFF3/Zea_mays.AGPv4.32.gff3.gz", format="gff3")
 
 #--------------------------------------------------------------------------------------------------#
 detach("package:readr", unload=TRUE)
 detach("package:readxl", unload=TRUE)
+detach("package:GenomicFeatures", unload=TRUE)
