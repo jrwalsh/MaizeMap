@@ -10,7 +10,7 @@
 #' @usage data(maize.genes.v3_to_v4.map)
 #' @keywords datasets
 #'
-#' @format A data frame columns [v3_id, v4_id].
+#' @format A data frame columns [v3_id, v4_id, type].
 "maize.genes.v3_to_v4.map"
 
 #' CornCyc 8 gene frameIDs mapped to B73 v4 gene models.
