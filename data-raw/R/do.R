@@ -1,6 +1,6 @@
 ####################################################################################################
 ## Project:         MaizeMap
-## Script purpose:  Create and combine objects to use for analysis and plots.
+## Script purpose:  Create and combine data/objects to use.  Output data for packaging.
 ##
 ## Input:
 ## Output:

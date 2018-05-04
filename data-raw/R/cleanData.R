@@ -29,23 +29,68 @@ library(GenomicFeatures)
 #--------------------------------------------------------------------------------------------------#
 maize.genes.v3_to_v4.map <- maize.genes.v3_to_v4_map.raw
 
+# ## Select relevant columns
+# maize.genes.v3_to_v4.map <-
+#   maize.genes.v3_to_v4.map %>%
+#   rename(v3_id = `v3 gene ID`, v4_id = `v4 gene ID (if present)`) %>%
+#   select(v3_id, v4_id)
+#
+# ## Remove empty values
+# maize.genes.v3_to_v4.map$v3_id[maize.genes.v3_to_v4.map$v3_id == "na"] <- NA
+# maize.genes.v3_to_v4.map$v4_id[maize.genes.v3_to_v4.map$v4_id == "na"] <- NA
+#
+# ## Remove specific associations that are not useful for this mapping
+# maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "AF")] <- NA
+# maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "AY")] <- NA
+# maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "EF")] <- NA
+# maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "zma")] <- NA
+# maize.genes.v3_to_v4.map$v4_id[startsWith(maize.genes.v3_to_v4.map$v4_id, "zma")] <- NA
+# maize.genes.v3_to_v4.map$v4_id[maize.genes.v3_to_v4.map$v4_id == "not in v4"] <- NA
+#
+# ## Remove non-matches
+# maize.genes.v3_to_v4.map <-
+#   maize.genes.v3_to_v4.map %>%
+#   filter(!is.na(v3_id) & !is.na(v4_id))
+
 ## Select relevant columns
 maize.genes.v3_to_v4.map <-
   maize.genes.v3_to_v4.map %>%
-  rename(v3_id = `v3 gene ID`, v4_id = `v4 gene ID (if present)`) %>%
-  select(v3_id, v4_id)
+  rename(v3_id = X1, v4_id = X2, type = X3) %>%
+  select(v3_id, v4_id, type)
 
 ## Remove empty values
-maize.genes.v3_to_v4.map$v3_id[maize.genes.v3_to_v4.map$v3_id == "na"] <- NA
-maize.genes.v3_to_v4.map$v4_id[maize.genes.v3_to_v4.map$v4_id == "na"] <- NA
+# maize.genes.v3_to_v4.map$v3_id[maize.genes.v3_to_v4.map$v3_id == "na"] <- NA # none in this dataset
+# maize.genes.v3_to_v4.map$v4_id[maize.genes.v3_to_v4.map$v4_id == "na"] <- NA # none in this dataset
+maize.genes.v3_to_v4.map$type[is.na(maize.genes.v3_to_v4.map$type)] <- "match"
+
+## Merge the groups (split, split?) and (merged, merged?)
+maize.genes.v3_to_v4.map$type[maize.genes.v3_to_v4.map$type == "split?"] <- "split"
+maize.genes.v3_to_v4.map$type[maize.genes.v3_to_v4.map$type == "merged?"] <- "merged"
+
+## Spread out split and merged cases so each entry is a single gene ID
+match.genes <-
+  maize.genes.v3_to_v4.map[maize.genes.v3_to_v4.map$type %in% c("match"),]
+split.genes <-
+  maize.genes.v3_to_v4.map[maize.genes.v3_to_v4.map$type %in% c("split"),] %>%
+  mutate(v4_id = strsplit(as.character(v4_id), ",")) %>%
+  unnest(v4_id) %>%
+  select(v3_id, v4_id, type)
+merged.genes <-
+  maize.genes.v3_to_v4.map[maize.genes.v3_to_v4.map$type %in% c("merged"),] %>%
+  mutate(v3_id = strsplit(as.character(v3_id), ",")) %>%
+  unnest(v3_id) %>%
+  select(v3_id, v4_id, type)
+
+maize.genes.v3_to_v4.map <-
+  bind_rows(match.genes, split.genes, merged.genes)
 
 ## Remove specific associations that are not useful for this mapping
 maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "AF")] <- NA
 maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "AY")] <- NA
 maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "EF")] <- NA
-maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "zma")] <- NA
-maize.genes.v3_to_v4.map$v4_id[startsWith(maize.genes.v3_to_v4.map$v4_id, "zma")] <- NA
-maize.genes.v3_to_v4.map$v4_id[maize.genes.v3_to_v4.map$v4_id == "not in v4"] <- NA
+# maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "zma")] <- NA # none in this dataset
+# maize.genes.v3_to_v4.map$v4_id[startsWith(maize.genes.v3_to_v4.map$v4_id, "zma")] <- NA # none in this dataset
+# maize.genes.v3_to_v4.map$v4_id[maize.genes.v3_to_v4.map$v4_id == "not in v4"] <- NA # none in this dataset
 
 ## Remove non-matches
 maize.genes.v3_to_v4.map <-

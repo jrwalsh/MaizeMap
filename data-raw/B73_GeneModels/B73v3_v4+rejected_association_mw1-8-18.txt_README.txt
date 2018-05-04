@@ -1,0 +1,25 @@
+The file
+
+B73v3_v4+rejected_association_mw1-8-18.txt
+
+was generated through CoGe SynMap using the following parameters
+
+megablast 0.001
+Maximum distance between two matches (-D): 20 genes
+Minimum number of aligned pairs (-A): 3 genes
+Turn on QA 1:1 for maize:maize comparison
+
+The genomes used were
+
+Ensembl Zea_mays.AGPv3.25
+
+vs
+
+Zea_mays.AGPv4 with the gff file Zea_mays.AGPv4.36+rejected.gff3 which is the merging of Ensembl annotation file Zea_mays.AGPv4.36 with the rejected set gff file Zea_mays.AGPv4.rejected_set.gff3 from Gramene downloaded on September 9, 2016.
+
+The output of this job was run through the script 
+
+b73v3_associations.sh
+
+to report v4 genes that were split or merged relative to v3.
+
