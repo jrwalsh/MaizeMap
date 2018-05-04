@@ -17,10 +17,9 @@ library(readxl)
 library(GenomicFeatures)
 
 ## Mapping data provided by Maggie, based on synteny from SynMap.
-# maize.genes.v3_to_v4_map.raw <- read_xlsx("./data-raw/B73_GeneModels/MaizeGDB_v3_v4.genes.xlsx") # from 9/2018, outdated
 maize.genes.v3_to_v4_map.raw <- read_delim("data-raw/B73_GeneModels/B73v3_v4+rejected_association_mw1-8-18.tab",
-           "\t", escape_double = FALSE, col_names = FALSE,
-           trim_ws = TRUE, skip = 2)
+                                           "\t", escape_double = FALSE, col_names = FALSE,
+                                           trim_ws = TRUE, skip = 2)
 
 ## CornCyc gene frameID to v4 map
 corncyc.gene.frameid.raw <- read_delim("data-raw/Pathways/CornCyc_8.0.1/CornCyc_8.0.1_GeneIDs.tab", "\t", escape_double = FALSE, trim_ws = TRUE)
