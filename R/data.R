@@ -13,6 +13,41 @@
 #' @format A data frame columns [v3_id, v4_id, type].
 "maize.genes.v3_to_v4.map"
 
+#' Classical gene models mapped to B73 v3 gene model ids
+#'
+#' Provided by MaizeGDB, mapping is 1 to 1.
+#'
+#' @docType data
+#' @usage data(maize.genes.classical_to_v3.map)
+#' @keywords datasets
+#'
+#' @format A data frame columns [classical, v3_id].
+"maize.genes.classical_to_v3.map"
+
+#' UniProt Accessions mapped to B73 v3 gene model ids
+#'
+#' Downloaded from UniProt.  Parses "Gramene" cross-reference field for the B73 ids.  Mapping is may include many-to-many
+#' relationships, but has unnested the B73 ids where possible.
+#'
+#' @docType data
+#' @usage data(maize.genes.uniprot_to_v3.map)
+#' @keywords datasets
+#'
+#' @format A data frame columns [UniProt_Acc, v3_id].
+"maize.genes.uniprot_to_v3.map"
+
+#' UniProt Accessions mapped to B73 v4 gene model ids
+#'
+#' Downloaded from UniProt.  Parses "Gramene" cross-reference field for the B73 ids.  Mapping is may include many-to-many
+#' relationships, but has unnested the B73 ids where possible.
+#'
+#' @docType data
+#' @usage data(maize.genes.uniprot_to_v4.map)
+#' @keywords datasets
+#'
+#' @format A data frame columns [UniProt_Acc, v4_id].
+"maize.genes.uniprot_to_v4.map"
+
 #' CornCyc 8 gene frameIDs mapped to B73 v4 gene models.
 #'
 #' This data is a direct dump from CornCyc 8.0.1.  It represents all genes in the database that have a

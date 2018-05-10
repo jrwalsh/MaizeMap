@@ -6,12 +6,17 @@
 ##
 ## Input:
 ##        maize.genes.v3_to_v4_map.raw
+##        maize.genes.classical_to_v3_map.raw
+##        maize.genes.uniprot_to_v4_map.raw
 ##        corncyc.gene.frameid.raw
 ##        corncyc.reaction.frameid.raw
 ##        corncyc.pathway.frameid.raw
 ##        txdb
 ## Output:
 ##        maize.genes.v3_to_v4.map
+##        maize.genes.classical_to_v3.map
+##        maize.genes.uniprot_to_v3.map
+##        maize.genes.uniprot_to_v4.map
 ##        corncyc.gene.map
 ##        corncyc.reaction.gene.map
 ##        corncyc.pathway.reaction.map
@@ -68,6 +73,67 @@ maize.genes.v3_to_v4.map$v3_id[startsWith(maize.genes.v3_to_v4.map$v3_id, "EF")]
 maize.genes.v3_to_v4.map <-
   maize.genes.v3_to_v4.map %>%
   filter(!is.na(v3_id) & !is.na(v4_id))
+
+#==================================================================================================#
+## maize.genes.classical_to_v3_map.raw
+#--------------------------------------------------------------------------------------------------#
+maize.genes.classical_to_v3.map <- maize.genes.classical_to_v3_map.raw
+
+## Rename and select relevant columns
+maize.genes.classical_to_v3.map <-
+  maize.genes.classical_to_v3.map %>%
+  rename(classical = `Gene Symbol`, v3_id = `Gene Model ID`) %>%
+  select(classical, v3_id)
+
+## Manual review suggests there are 2 errors in this list that should be removed.
+## gln3->GRMZM2G050514 is an inaccurate association (should be only gln6, which is included in this list)
+## ssu1->GRMZM2G113033 is an inaccurate association (should be only ssu2, which is included in this list)
+maize.genes.classical_to_v3.map <-
+  maize.genes.classical_to_v3.map %>%
+  subset(!(classical %in% c("gln3") & v3_id %in% c("GRMZM2G050514"))) %>%
+  subset(!(classical %in% c("ssu1") & v3_id %in% c("GRMZM2G113033")))
+
+#==================================================================================================#
+## maize.genes.uniprot_to_v4_map.raw
+#--------------------------------------------------------------------------------------------------#
+maize.genes.uniprot_to_v4.map <- maize.genes.uniprot_to_v4_map.raw
+
+## Rename and select relevant columns
+maize.genes.uniprot_to_v4.map <-
+  maize.genes.uniprot_to_v4.map %>%
+  rename(UniProt_Acc = Entry, v4_id = `Cross-reference (Gramene)`) %>%
+  select(UniProt_Acc, v4_id)
+
+## We are mapping to gene models, not transcripts.  Remove the _T### designations, split lists, and deduplicate
+maize.genes.uniprot_to_v4.map <-
+  maize.genes.uniprot_to_v4.map %>%
+  mutate(v4_id=gsub("_[PT]\\d\\d", "", v4_id, perl=TRUE)) %>%
+  mutate(v4_id=gsub("_[PT]\\d\\d\\d", "", v4_id, perl=TRUE)) %>%
+  mutate(v4_id=strsplit(as.character(v4_id), ";")) %>%
+  unnest(v4_id) %>%
+  distinct()
+
+## Fix Errors: some v4_id have a reference to the uniprot accession inside square braces... remove them
+##    Example: "GRMZM5G884960 [P05643-2]"
+##        maize.genes.uniprot_to_v4.map$v4_id[maize.genes.uniprot_to_v4.map$v4_id %in% c("GRMZM5G884960 [P05643-2]")] <- "GRMZM5G884960"
+maize.genes.uniprot_to_v4.map <-
+  maize.genes.uniprot_to_v4.map %>%
+  mutate(v4_id=gsub(" \\[.*\\]", "", v4_id, perl=TRUE)) %>% mutate(len = nchar(v4_id))
+
+## Remove empty associations
+maize.genes.uniprot_to_v4.map <-
+  maize.genes.uniprot_to_v4.map %>%
+  subset(!is.na(v4_id))
+
+## Split the v3 and v4 associations
+maize.genes.uniprot_to_v3.map <-
+  maize.genes.uniprot_to_v4.map[!startsWith(maize.genes.uniprot_to_v4.map$v4_id, "Zm"),] %>%
+  rename(v3_id = v4_id)
+maize.genes.uniprot_to_v4.map <-
+  maize.genes.uniprot_to_v4.map[startsWith(maize.genes.uniprot_to_v4.map$v4_id, "Zm"),]
+
+## Double check length of ids
+# View(maize.genes.uniprot_to_v4.map %>% mutate(v4_id=gsub(" \\[.*\\]", "", v4_id, perl=TRUE)) %>% mutate(len = nchar(v4_id)))
 
 #==================================================================================================#
 ## corncyc.gene.frameid.raw

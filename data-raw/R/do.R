@@ -14,6 +14,9 @@ library(dplyr)
 
 ## Save data objects
 devtools::use_data(maize.genes.v3_to_v4.map, overwrite = TRUE)
+devtools::use_data(maize.genes.classical_to_v3.map, overwrite = TRUE)
+devtools::use_data(maize.genes.uniprot_to_v3.map, overwrite = TRUE)
+devtools::use_data(maize.genes.uniprot_to_v4.map, overwrite = TRUE)
 devtools::use_data(corncyc.gene.map, overwrite = TRUE)
 devtools::use_data(corncyc.reaction.gene.map, overwrite = TRUE)
 devtools::use_data(corncyc.pathway.reaction.map, overwrite = TRUE)
