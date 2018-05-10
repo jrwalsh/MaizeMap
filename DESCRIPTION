@@ -1,7 +1,7 @@
 Package: MaizeMap
 Type: Package
 Title: Container for lists and mapping files related to Maize identifiers from multiple databases.
-Version: 0.1.0
+Version: 0.2.0
 Author: Jesse R. Walsh
 Maintainer: Jesse R. Walsh <jesse@iastate.edu>
 Description: Contains mapping information for B73 v3 and v4 gene models and CornCyc 8 gene/reaction/pathways.

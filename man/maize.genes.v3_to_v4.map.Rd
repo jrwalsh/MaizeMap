@@ -4,7 +4,7 @@
 \name{maize.genes.v3_to_v4.map}
 \alias{maize.genes.v3_to_v4.map}
 \title{Unpublished map between B73 v3 and v4 gene model ids}
-\format{A data frame columns [v3_id, v4_id].}
+\format{A data frame columns [v3_id, v4_id, type].}
 \usage{
 data(maize.genes.v3_to_v4.map)
 }
