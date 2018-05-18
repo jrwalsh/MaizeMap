@@ -43,6 +43,9 @@ maize.genes.v3_to_v4.map <-
 ## Remove empty values
 maize.genes.v3_to_v4.map$type[is.na(maize.genes.v3_to_v4.map$type)] <- "match"
 
+## Remove rows with v3 id's in the v4 column
+maize.genes.v3_to_v4.map <- maize.genes.v3_to_v4.map[!startsWith(maize.genes.v3_to_v4.map$v4_id, "GRMZM"),]
+
 ## Merge the groups (split, split?) and (merged, merged?)
 maize.genes.v3_to_v4.map$type[maize.genes.v3_to_v4.map$type == "split?"] <- "split"
 maize.genes.v3_to_v4.map$type[maize.genes.v3_to_v4.map$type == "merged?"] <- "merged"
