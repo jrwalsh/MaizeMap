@@ -11,6 +11,7 @@
 ##        corncyc.gene.frameid.raw
 ##        corncyc.reaction.frameid.raw
 ##        corncyc.pathway.frameid.raw
+##        maize.v4.37.chromosomal.gene.positions.raw
 ##        txdb
 ## Output:
 ##        maize.genes.v3_to_v4.map
@@ -20,6 +21,7 @@
 ##        corncyc.gene.map
 ##        corncyc.reaction.gene.map
 ##        corncyc.pathway.reaction.map
+##        maize.v4.37.chromosomal.gene.positions
 ##        gene.transcript.map
 ##
 ## Date: 2017-12-12
@@ -206,6 +208,26 @@ corncyc.pathway.reaction.map <-
   select(PathwayID, ReactionID)
 
 #==================================================================================================#
+## maize.v4.37.chromosomal.gene.positions.raw
+#--------------------------------------------------------------------------------------------------#
+maize.v4.37.chromosomal.gene.positions <- maize.v4.37.chromosomal.gene.positions.raw
+
+## Pull out only the "gene" type entries from the GFF file
+maize.v4.37.chromosomal.gene.positions <-
+  maize.v4.37.chromosomal.gene.positions %>%
+  rename(chromosome = X1, source = X2, type = X3, startPos = X4, endPos = X5, name = X9) %>%
+  select(chromosome, type, startPos, endPos, name) %>%
+  subset(type %in% c("gene"))
+
+maize.v4.37.chromosomal.gene.positions$name <- gsub(maize.v4.37.chromosomal.gene.positions$name, pattern = ";.*", replacement = "", perl = TRUE)
+maize.v4.37.chromosomal.gene.positions$name <- gsub(maize.v4.37.chromosomal.gene.positions$name, pattern = "ID.*:", replacement = "", perl = TRUE)
+
+maize.v4.37.chromosomal.gene.positions <-
+  maize.v4.37.chromosomal.gene.positions %>%
+  rename(chr=chromosome, geneID=name) %>%
+  select(chr, geneID, startPos, endPos)
+
+#==================================================================================================#
 ## txdb -> gene.transcript.map
 #--------------------------------------------------------------------------------------------------#
 ## Only work with chromosomes, ignore unplaced contigs
@@ -221,6 +243,8 @@ gene.transcript.map <-
 gene.transcript.map$transcript <- sub("transcript:", "", gene.transcript.map$transcript)
 gene.transcript.map$gene <- sub("(Zm[0-9]{5}d[0-9]{6}).*", "\\1", gene.transcript.map$transcript)
 gene.transcript.map <- gene.transcript.map[!startsWith(gene.transcript.map$transcript, "MI"),]
+gene.transcript.map <- gene.transcript.map[!startsWith(gene.transcript.map$transcript, "zma"),]
+gene.transcript.map <- gene.transcript.map[!startsWith(gene.transcript.map$transcript, "ENSRN"),]
 
 ## Reorder columns to gene:transcript
 gene.transcript.map <-

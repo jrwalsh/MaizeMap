@@ -20,6 +20,7 @@ devtools::use_data(maize.genes.uniprot_to_v4.map, overwrite = TRUE)
 devtools::use_data(corncyc.gene.map, overwrite = TRUE)
 devtools::use_data(corncyc.reaction.gene.map, overwrite = TRUE)
 devtools::use_data(corncyc.pathway.reaction.map, overwrite = TRUE)
+devtools::use_data(maize.v4.37.chromosomal.gene.positions, overwrite = TRUE)
 devtools::use_data(gene.transcript.map, overwrite = TRUE)
 
 devtools::document(roclets=c('rd', 'collate', 'namespace'))

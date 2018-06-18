@@ -9,6 +9,7 @@
 ##        corncyc.gene.frameid.raw
 ##        corncyc.reaction.frameid.raw
 ##        corncyc.pathway.frameid.raw
+##        maize.v4.37.chromosomal.gene.positions.raw
 ##        txdb
 ##
 ## Date: 2017-12-12
@@ -40,8 +41,13 @@ corncyc.reaction.frameid.raw <- read_delim("data-raw/Pathways/CornCyc_8.0.1/Corn
 ## CornCyc pathway frameID to reaction frameID map
 corncyc.pathway.frameid.raw <- read_delim("data-raw/Pathways/CornCyc_8.0.1/CornCyc_8.0.1_Pathways.tab", "\t", escape_double = FALSE, trim_ws = TRUE)
 
-## Load maize GFF data
-txdb <- makeTxDbFromGFF("./data-raw/MaizeGFF3/Zea_mays.AGPv4.32.gff3.gz", format="gff3")
+## Load Maize GFF data
+maize.v4.37.chromosomal.gene.positions.raw <- read_delim("data-raw/MaizeGFF3/Zea_mays.AGPv4.37.gff3.gz",
+                                                     "\t", escape_double = FALSE, col_names = FALSE,
+                                                     comment = "#", trim_ws = TRUE, col_types = "ccciicccc")
+
+## Load maize GFF data into txdb object
+txdb <- makeTxDbFromGFF("./data-raw/MaizeGFF3/Zea_mays.AGPv4.37.gff3.gz", format="gff3")
 
 #--------------------------------------------------------------------------------------------------#
 detach("package:readr", unload=TRUE)

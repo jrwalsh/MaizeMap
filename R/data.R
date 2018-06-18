@@ -86,7 +86,21 @@
 
 #' Map from genes to all available transcripts.
 #'
-#' Parsed from the zea mays b73 v4.32 gff3 file.  Excludes orphan exons.
+#' Parsed from the zea mays b73 v4.37 gff3 file available at ftp://ftp.ensemblgenomes.org/pub/release-37/plants/gff3/zea_mays/Zea_mays.AGPv4.37.gff3.gz.
+#' Includes the 10 primary, Mt, and Pt chromosomes as well as unplaced scaffolds. Lists gene models and their start and end positions.
+#' Contains some v3 ID's.
+#'
+#' @docType data
+#' @usage data(maize.v4.37.chromosomal.gene.positions)
+#' @keywords datasets
+#'
+#' @format A data frame with 4 columns and 39179 rows.
+"maize.v4.37.chromosomal.gene.positions"
+
+#' Map from genes to all available transcripts.
+#'
+#' Parsed from the zea mays b73 v4.37 gff3 file.  Excludes orphan exons. Excludes gene/transcripts with ID's beginning with MI, zma, or ENSRN, which
+#' are all not standard v4 identifiers.
 #'
 #' @docType data
 #' @usage data(gene.transcript.map)
