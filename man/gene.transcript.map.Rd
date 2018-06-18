@@ -9,6 +9,7 @@
 data(gene.transcript.map)
 }
 \description{
-Parsed from the zea mays b73 v4.32 gff3 file.  Excludes orphan exons.
+Parsed from the zea mays b73 v4.37 gff3 file.  Excludes orphan exons. Excludes gene/transcripts with ID's beginning with MI, zma, or ENSRN, which
+are all not standard v4 identifiers.
 }
 \keyword{datasets}
