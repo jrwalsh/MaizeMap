@@ -5,7 +5,7 @@ Version: 0.2.1
 Author: Jesse R. Walsh
 Maintainer: Jesse R. Walsh <jesse@iastate.edu>
 Description: Contains mapping information for B73 v3 and v4 gene models and CornCyc 8 gene/reaction/pathways.
-License: See original sources
+License: License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
